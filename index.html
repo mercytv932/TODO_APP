@@ -45,6 +45,17 @@ const doc = parser.parseFromString(text, 'text/html');
 
 return doc.body.textContent || "";
 }
+
+const state = {todos: [], filter: 'all'}
+
+function addTodo(todoText){
+  const newTodo = {
+    id: Date.now(),
+    text: todoText, 
+    completed: false
+  };
+  state.todos = [...state.todos, newTodo];
+}
   </script>
 </body>
 </html>
