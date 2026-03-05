@@ -17,6 +17,24 @@
 export const STORAGE_KEY = 'todos';
 export const MAX_TODO_LENGTH = 100;
 
+
+function getFromStorage(key){
+  const value = localStorage.getItem(key);
+
+  return value;
+}
+
+function saveToStorage(key, value){
+  localStorage.setItem(key, value);
+}
+
+function sanitizeInput(){
+const parser = new DOMParser();
+const doc = parser.parseFromString(text, 'text/html');
+
+return doc.body.textContent || "";
+}
   </script>
 </body>
 </html>
+
