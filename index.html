@@ -13,10 +13,21 @@
 
   <script>
 
+    
+
 
 export const STORAGE_KEY = 'todos';
 export const MAX_TODO_LENGTH = 100;
 
+
+class todo {
+  constructor(task){
+    this.id = Date.now();
+    this.task = task; // the task/text
+    this.completed = false;  //default state  = not completed
+    this.createdAt = new Date(); //time of the creation
+  }
+}
 
 function getFromStorage(key){
   const value = localStorage.getItem(key);
@@ -37,4 +48,3 @@ return doc.body.textContent || "";
   </script>
 </body>
 </html>
-
