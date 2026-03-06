@@ -16,46 +16,44 @@
     
 
 
-export const STORAGE_KEY = 'todos';
-export const MAX_TODO_LENGTH = 100;
+ const STORAGE_KEY = 'todos';
+ const MAX_TODO_LENGTH = 100;
 
+function createTodo(text){
 
-class todo {
-  constructor(task){
-    this.id = Date.now();
-    this.task = task; // the task/text
-    this.completed = false;  //default state  = not completed
-    this.createdAt = new Date(); //time of the creation
-  }
+const Todo = {
+  id: Date.now(),
+  text: text,
+  completed:false,
+  createdAt: new Date()
+}; 
+return Todo;
+
 }
 
 function getFromStorage(key){
-  const value = localStorage.getItem(key);
+  const storedTodoString = localStorage.getItem(key);
 
-  return value;
+  return JSON.parse(storedTodoString);
+  // const TodoObject = JSON.parse(storedTodoString);
+  
+  // console.log(TodoObject);
 }
 
 function saveToStorage(key, value){
-  localStorage.setItem(key, value);
+  const TodoString = JSON.stringify(value);
+  localStorage.setItem(key, TodoString);
 }
 
-function sanitizeInput(){
+function sanitizeInput(sanitizeText){
 const parser = new DOMParser();
-const doc = parser.parseFromString(text, 'text/html');
+const doc = parser.parseFromString(sanitizeText, 'text/html');
 
 return doc.body.textContent || "";
 }
 
 const state = {todos: [], filter: 'all'}
 
-function addTodo(todoText){
-  const newTodo = {
-    id: Date.now(),
-    text: todoText, 
-    completed: false
-  };
-  state.todos = [...state.todos, newTodo];
-}
   </script>
 </body>
 </html>
