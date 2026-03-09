@@ -10,11 +10,21 @@
 </head>
 <body>
 
+<form id="form">
+  <input type="text" id="input">
+  <button>Add Todo</button>
+</form>
+
+<button class="filterBtn" data-filter="all">All</button>
+<button class="filterBtn" data-filter="active">Active</button>
+<button class="filterBtn" data-filter="completed">Completed</button>
+
+<div id="todos-container"></div>
+<div id="stats-display"></div>
 
   <script>
 
-    
-
+  
 
  const STORAGE_KEY = 'todos';
  const MAX_TODO_LENGTH = 100;
@@ -57,3 +67,5 @@ const state = {todos: [], filter: 'all'}
   </script>
 </body>
 </html>
+
+
