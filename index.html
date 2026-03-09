@@ -12,20 +12,22 @@
 
 <form id="form">
   <input type="text" id="input">
-  <button>Add Todo</button>
+  <button class="addTodo">Add Todo</button>
 </form>
 
 <button class="filterBtn" data-filter="all">All</button>
 <button class="filterBtn" data-filter="active">Active</button>
 <button class="filterBtn" data-filter="completed">Completed</button>
 
-<div id="todos-container"></div>
-<div id="stats-display"></div>
+<div id="todosContainer"></div>
+<div id="statsDisplay"></div>
 
-  <script>
-
-  
-
+  <script>   
+ const input = document.querySelector("#input");
+ const addTodo = document.querySelector(".addTodo");
+ const filterBtn = document.querySelectorAll(".filterBtn");
+ const todosContainer = document.querySelector("#todosContainer");
+ const statsDisplay = document.querySelector()
  const STORAGE_KEY = 'todos';
  const MAX_TODO_LENGTH = 100;
 
@@ -64,8 +66,11 @@ return doc.body.textContent || "";
 
 const state = {todos: [], filter: 'all'}
 
+
+function renderTodos(){
+  
+}
+
   </script>
 </body>
 </html>
-
-
