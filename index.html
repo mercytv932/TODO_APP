@@ -70,6 +70,7 @@ return doc.body.textContent || "";
 const state = {todos: [], filter: 'all'}
 
 
+
 function renderTodos(todos){
   todosContainer.innerHTML = "";
   const ul = document.createElement("ul");
@@ -79,14 +80,22 @@ function renderTodos(todos){
     const li = document.createElement("li");
 
     li.textContent = `${todos[i].text}`;
+
+    if(todos[i].completed){
+      li.style.textDecoration = "line through";
+    }
+
+    li.addEventListener("click", function(){
+      toggleTodo(todos[i].id);
+    });
     
     ul.appendChild(li);
-
+    
+    console.log(todos[i].text, todos[i].completed);
   }
   
   todosContainer.appendChild(ul);
 }
-
 
  function addTodo(){
   const inputValue = input.value.trim();
@@ -109,6 +118,32 @@ function renderTodos(todos){
   e.preventDefault();
   addTodo();
  });
+
+ function toggleTodo(id){
+  const updatedTodos = state.todos.map((todo) =>{
+    if(todo.id === id){
+      return {...todo, completed: !todo.completed};
+    }
+    return todo;
+  });
+
+   state.todos = updatedTodos;
+  saveToStorage(STORAGE_KEY, state.todos);
+
+  console.log("toggleTodo called", id);
+}
+
+
   </script>
 </body>
 </html>
+
+
+Step 9: Create toggleTodo function (20 min)
+
+Find todo by id
+Toggle completed property
+Update state
+Save to storage
+Re-render
+Test: Check/uncheck works
