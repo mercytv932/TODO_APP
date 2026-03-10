@@ -12,7 +12,7 @@
 
 <form id="form">
   <input type="text" id="input">
-  <button class="addTodo">Add Todo</button>
+  <button class="addTodoBtn">Add Todo</button>
 </form>
 
 <button class="filterBtn" data-filter="all">All</button>
@@ -23,8 +23,9 @@
 <div id="statsDisplay"></div>
 
   <script>   
+ const form = document.querySelector("#form"); 
  const input = document.querySelector("#input");
- const addTodo = document.querySelector(".addTodo");
+ const addTodoBtn = document.querySelector(".addTodoBtn");
  const filterBtn = document.querySelectorAll(".filterBtn");
  const todosContainer = document.querySelector("#todosContainer");
  const statsDisplay = document.querySelector("#statsDisplay");
@@ -35,13 +36,13 @@
 
 function createTodo(text){
 
-const Todo = {
+const todo = {
   id: Date.now(),
   text: text,
   completed:false,
   createdAt: new Date()
 }; 
-return Todo;
+return todo;
 
 }
 
@@ -55,8 +56,8 @@ function getFromStorage(key){
 }
 
 function saveToStorage(key, value){
-  const TodoString = JSON.stringify(value);
-  localStorage.setItem(key, TodoString);
+  const todoString = JSON.stringify(value);
+  localStorage.setItem(key, todoString);
 }
 
 function sanitizeInput(sanitizeText){
@@ -66,7 +67,7 @@ const doc = parser.parseFromString(sanitizeText, 'text/html');
 return doc.body.textContent || "";
 }
 
-const state = {Todos: [], filter: 'all'}
+const state = {todos: [], filter: 'all'}
 
 
 function renderTodos(todos){
@@ -84,112 +85,30 @@ function renderTodos(todos){
   }
   
   todosContainer.appendChild(ul);
-
 }
 
-renderTodos ([
 
-{text: "Milk", completed: false},
-{text: "Corn", completed: false}
-]);
-
-  </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TODO APP</title>
-  <style>
-
-  </style>
-</head>
-<body>
-
-<form id="form">
-  <input type="text" id="input">
-  <button class="addTodo">Add Todo</button>
-</form>
-
-<button class="filterBtn" data-filter="all">All</button>
-<button class="filterBtn" data-filter="active">Active</button>
-<button class="filterBtn" data-filter="completed">Completed</button>
-
-<div id="todosContainer"></div>
-<div id="statsDisplay"></div>
-
-  <script>   
- const input = document.querySelector("#input");
- const addTodo = document.querySelector(".addTodo");
- const filterBtn = document.querySelectorAll(".filterBtn");
- const todosContainer = document.querySelector("#todosContainer");
- const statsDisplay = document.querySelector("#statsDisplay");
-
-
- const STORAGE_KEY = 'todos';
- const MAX_TODO_LENGTH = 100;
-
-function createTodo(text){
-
-const Todo = {
-  id: Date.now(),
-  text: text,
-  completed:false,
-  createdAt: new Date()
-}; 
-return Todo;
-
-}
-
-function getFromStorage(key){
-  const storedTodoString = localStorage.getItem(key);
-
-  return JSON.parse(storedTodoString);
-  // const TodoObject = JSON.parse(storedTodoString);
+ function addTodo(){
+  const inputValue = input.value.trim();
   
-  // console.log(TodoObject);
-}
-
-function saveToStorage(key, value){
-  const TodoString = JSON.stringify(value);
-  localStorage.setItem(key, TodoString);
-}
-
-function sanitizeInput(sanitizeText){
-const parser = new DOMParser();
-const doc = parser.parseFromString(sanitizeText, 'text/html');
-
-return doc.body.textContent || "";
-}
-
-const state = {Todos: [], filter: 'all'}
-
-
-function renderTodos(todos){
-  todosContainer.innerHTML = "";
-  const ul = document.createElement("ul");
-
-
-  for(let i = 0; i < todos.length; i +=1){
-    const li = document.createElement("li");
-
-    li.textContent = `${todos[i].text}`;
-    
-    ul.appendChild(li);
-
+  if(inputValue === ""){
+    alert("please enter a task.")
+    return;
   }
-  
-  todosContainer.appendChild(ul);
 
-}
+  state.todos.push(createTodo(inputValue));
+  saveToStorage(STORAGE_KEY, state.todos);
+  renderTodos(state.todos);
 
-renderTodos ([
 
-{text: "Milk", completed: false},
-{text: "Corn", completed: false}
-]);
+  input.value = ""; // clear for the next todo entry.
+  input.focus();
+ }
 
+ form.addEventListener("submit", function(e){
+  e.preventDefault();
+  addTodo();
+ });
   </script>
 </body>
 </html>
