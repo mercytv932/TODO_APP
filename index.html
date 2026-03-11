@@ -126,7 +126,7 @@ function renderTodos(todos){
 
   state.todos.push(createTodo(inputValue));
   saveToStorage(STORAGE_KEY, state.todos);
-  renderTodos(state.todos);
+  render();
 
 
   input.value = ""; // clear for the next todo entry.
@@ -152,6 +152,7 @@ function renderTodos(todos){
   saveToStorage(STORAGE_KEY, state.todos);
 
   console.log("toggleTodo called", id);
+  render();
 }
 
 
@@ -160,26 +161,31 @@ function deleteTodo(id){
   const updatedTodos = state.todos.filter( (todo) => todo.id !==id);
   state.todos = updatedTodos;
   saveToStorage(STORAGE_KEY, state.todos);
-  renderTodos(state.todos);
+  render();
 }
 
+function getFilteredTodos(todos, filter){
+  if (filter === 'active'){
+    return todos.filter(todo => !todo.completed)
+  } else if (filter ==='completed'){
+    return todos.filter(todo => todo.completed);
+  } else {
+    return todos;
+  };
+}
+
+function render(){
+    const filteredTodos = getFilteredTodos(state.todos, state.filter);
+    renderTodos(filteredTodos);
+  }
+
+  filterBtn.forEach(button =>{
+    button.addEventListener("click", ()=>{
+      state.filter = button.dataset.filter;
+      render();
+    });
+  });
 
   </script>
 </body>
 </html>
-Find todo by id. Toggle completed property. Update state. Save to storage. Re-render.
-
-Step 10: Create deleteTodo function (20 min)
-
-Filter out todo by id
-Update state
-Save to storage
-Re-render
-Test: Delete removes todo
-
-Step 11: Create filter functionality (25 min)
-
-Create getFilteredTodos function
-Based on state.filter, return appropriate todos
-Update render to use filtered list
-Test: Filter buttons work
