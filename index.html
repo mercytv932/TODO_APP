@@ -34,6 +34,8 @@
  const STORAGE_KEY = 'todos';
  const MAX_TODO_LENGTH = 100;
 
+
+
 function createTodo(text){
 
 const todo = {
@@ -46,6 +48,8 @@ return todo;
 
 }
 
+
+
 function getFromStorage(key){
   const storedTodoString = localStorage.getItem(key);
 
@@ -54,6 +58,8 @@ function getFromStorage(key){
   
   // console.log(TodoObject);
 }
+
+
 
 function saveToStorage(key, value){
   const todoString = JSON.stringify(value);
@@ -71,15 +77,25 @@ const state = {todos: [], filter: 'all'}
 
 
 
+
 function renderTodos(todos){
   todosContainer.innerHTML = "";
   const ul = document.createElement("ul");
 
 
   for(let i = 0; i < todos.length; i +=1){
-    const li = document.createElement("li");
 
+    const li = document.createElement("li");
     li.textContent = `${todos[i].text}`;
+
+    const deleteTodoBtn = document.createElement("button");
+    deleteTodoBtn.textContent = "Delete";
+
+    deleteTodoBtn.addEventListener("click", function(e){
+      e.stopPropagation();
+      deleteTodo(todos[i].id);
+    })
+
 
     if(todos[i].completed){
       li.style.textDecoration = "line through";
@@ -89,13 +105,16 @@ function renderTodos(todos){
       toggleTodo(todos[i].id);
     });
     
+    li.appendChild(deleteTodoBtn);
     ul.appendChild(li);
-    
+
     console.log(todos[i].text, todos[i].completed);
   }
-  
+
   todosContainer.appendChild(ul);
 }
+
+
 
  function addTodo(){
   const inputValue = input.value.trim();
@@ -119,6 +138,8 @@ function renderTodos(todos){
   addTodo();
  });
 
+
+
  function toggleTodo(id){
   const updatedTodos = state.todos.map((todo) =>{
     if(todo.id === id){
@@ -134,16 +155,31 @@ function renderTodos(todos){
 }
 
 
+
+function deleteTodo(id){
+  const updatedTodos = state.todos.filter( (todo) => todo.id !==id);
+  state.todos = updatedTodos;
+  saveToStorage(STORAGE_KEY, state.todos);
+  renderTodos(state.todos);
+}
+
+
   </script>
 </body>
 </html>
+Find todo by id. Toggle completed property. Update state. Save to storage. Re-render.
 
+Step 10: Create deleteTodo function (20 min)
 
-Step 9: Create toggleTodo function (20 min)
-
-Find todo by id
-Toggle completed property
+Filter out todo by id
 Update state
 Save to storage
 Re-render
-Test: Check/uncheck works
+Test: Delete removes todo
+
+Step 11: Create filter functionality (25 min)
+
+Create getFilteredTodos function
+Based on state.filter, return appropriate todos
+Update render to use filtered list
+Test: Filter buttons work
