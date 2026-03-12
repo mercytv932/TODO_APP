@@ -98,7 +98,7 @@ function renderTodos(todos){
 
 
     if(todos[i].completed){
-      li.style.textDecoration = "line through";
+      li.style.textDecoration = "line-through";
     }
 
     li.addEventListener("click", function(){
@@ -108,7 +108,6 @@ function renderTodos(todos){
     li.appendChild(deleteTodoBtn);
     ul.appendChild(li);
 
-    console.log(todos[i].text, todos[i].completed);
   }
 
   todosContainer.appendChild(ul);
@@ -150,8 +149,6 @@ function renderTodos(todos){
 
    state.todos = updatedTodos;
   saveToStorage(STORAGE_KEY, state.todos);
-
-  console.log("toggleTodo called", id);
   render();
 }
 
@@ -195,6 +192,10 @@ function render(){
     statsDisplay.textContent = `Total: ${totalTodos}, active: ${activeTodos}, completed: ${completedTodos}`;
   }
 
+  window.addEventListener("load", function(){
+    state.todos = getFromStorage(STORAGE_KEY) || [];
+    render();
+  });
   </script>
 </body>
 </html>
