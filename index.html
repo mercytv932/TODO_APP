@@ -161,6 +161,7 @@ function deleteTodo(id){
   render();
 }
 
+
 function getFilteredTodos(todos, filter){
   if (filter === 'active'){
     return todos.filter(todo => !todo.completed)
@@ -171,11 +172,13 @@ function getFilteredTodos(todos, filter){
   };
 }
 
+
 function render(){
     const filteredTodos = getFilteredTodos(state.todos, state.filter);
     renderTodos(filteredTodos);
     updateStats();
   }
+
 
   filterBtn.forEach(button =>{
     button.addEventListener("click", ()=>{
@@ -183,6 +186,8 @@ function render(){
       render();
     });
   });
+
+  
 
   function updateStats(){
     const totalTodos = state.todos.length;
@@ -192,10 +197,13 @@ function render(){
     statsDisplay.textContent = `Total: ${totalTodos}, active: ${activeTodos}, completed: ${completedTodos}`;
   }
 
+
   window.addEventListener("load", function(){
     state.todos = getFromStorage(STORAGE_KEY) || [];
     render();
   });
+
+
   </script>
 </body>
 </html>
