@@ -177,6 +177,7 @@ function getFilteredTodos(todos, filter){
 function render(){
     const filteredTodos = getFilteredTodos(state.todos, state.filter);
     renderTodos(filteredTodos);
+    updateStats();
   }
 
   filterBtn.forEach(button =>{
@@ -185,6 +186,14 @@ function render(){
       render();
     });
   });
+
+  function updateStats(){
+    const totalTodos = state.todos.length;
+    const completedTodos = state.todos.filter(todo => todo.completed). length;
+    const activeTodos = totalTodos - completedTodos;
+
+    statsDisplay.textContent = `Total: ${totalTodos}, active: ${activeTodos}, completed: ${completedTodos}`;
+  }
 
   </script>
 </body>
