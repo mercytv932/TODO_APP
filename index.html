@@ -53,6 +53,20 @@ body{
   cursor: pointer;
 }
 
+ul{
+  list-style: none;
+  padding: 0;
+}
+
+li{
+  background-color: var(--card-color);
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
   </style>
 </head>
 <body>
@@ -142,7 +156,6 @@ function renderTodos(todos){
       e.stopPropagation();
       deleteTodo(todos[i].id);
     })
-
 
     if(todos[i].completed){
       li.style.textDecoration = "line-through";
