@@ -1,0 +1,179 @@
+ const form = document.querySelector("#form"); 
+ const input = document.querySelector("#input");
+ const addTodoBtn = document.querySelector(".addTodoBtn");
+ const filterBtn = document.querySelectorAll(".filterBtn");
+ const todosContainer = document.querySelector("#todosContainer");
+ const statsDisplay = document.querySelector("#statsDisplay");
+
+
+ const STORAGE_KEY = 'todos';
+ const MAX_TODO_LENGTH = 100;
+
+
+
+function createTodo(text){
+
+const todo = {
+  id: Date.now(),
+  text: text,
+  completed:false,
+  createdAt: new Date()
+}; 
+return todo;
+
+}
+
+
+
+function getFromStorage(key){
+  const storedTodoString = localStorage.getItem(key);
+
+  return JSON.parse(storedTodoString);
+  // const TodoObject = JSON.parse(storedTodoString);
+  
+  // console.log(TodoObject);
+}
+
+
+
+function saveToStorage(key, value){
+  const todoString = JSON.stringify(value);
+  localStorage.setItem(key, todoString);
+}
+
+function sanitizeInput(sanitizeText){
+const parser = new DOMParser();
+const doc = parser.parseFromString(sanitizeText, 'text/html');
+
+return doc.body.textContent || "";
+}
+
+const state = {todos: [], filter: 'all'}
+
+
+
+
+function renderTodos(todos){
+  todosContainer.innerHTML = "";
+  const ul = document.createElement("ul");
+
+
+  for(let i = 0; i < todos.length; i +=1){
+
+    const li = document.createElement("li");
+    li.textContent = `${todos[i].text}`;
+
+    const deleteTodoBtn = document.createElement("button");
+    deleteTodoBtn.textContent = "Delete";
+    deleteTodoBtn.className = "deleteTodoBtn";
+
+    deleteTodoBtn.addEventListener("click", function(e){
+      e.stopPropagation();
+      deleteTodo(todos[i].id);
+    })
+
+    if(todos[i].completed){
+      li.style.textDecoration = "line-through";
+    }
+
+    li.addEventListener("click", function(){
+      toggleTodo(todos[i].id);
+    });
+    
+    li.appendChild(deleteTodoBtn);
+    ul.appendChild(li);
+
+  }
+
+  todosContainer.appendChild(ul);
+}
+
+
+
+ function addTodo(){
+  const inputValue = input.value.trim();
+  
+  if(inputValue === ""){
+    alert("please enter a task.")
+    return;
+  }
+
+  state.todos.push(createTodo(inputValue));
+  saveToStorage(STORAGE_KEY, state.todos);
+  render();
+
+
+  input.value = ""; // clear for the next todo entry.
+  input.focus();
+ }
+
+ form.addEventListener("submit", function(e){
+  e.preventDefault();
+  addTodo();
+ });
+
+
+
+ function toggleTodo(id){
+  const updatedTodos = state.todos.map((todo) =>{
+    if(todo.id === id){
+      return {...todo, completed: !todo.completed};
+    }
+    return todo;
+  });
+
+   state.todos = updatedTodos;
+  saveToStorage(STORAGE_KEY, state.todos);
+  render();
+}
+
+
+
+function deleteTodo(id){
+  const updatedTodos = state.todos.filter( (todo) => todo.id !==id);
+  state.todos = updatedTodos;
+  saveToStorage(STORAGE_KEY, state.todos);
+  render();
+}
+
+
+function getFilteredTodos(todos, filter){
+  if (filter === 'active'){
+    return todos.filter(todo => !todo.completed)
+  } else if (filter ==='completed'){
+    return todos.filter(todo => todo.completed);
+  } else {
+    return todos;
+  };
+}
+
+
+function render(){
+    const filteredTodos = getFilteredTodos(state.todos, state.filter);
+    renderTodos(filteredTodos);
+    updateStats();
+  }
+
+
+  filterBtn.forEach(button =>{
+    button.addEventListener("click", ()=>{
+      state.filter = button.dataset.filter;
+      render();
+    });
+  });
+
+  
+
+  function updateStats(){
+    const totalTodos = state.todos.length;
+    const completedTodos = state.todos.filter(todo => todo.completed). length;
+    const activeTodos = totalTodos - completedTodos;
+
+    statsDisplay.textContent = `Total: ${totalTodos}, active: ${activeTodos}, completed: ${completedTodos}`;
+  }
+
+
+  window.addEventListener("load", function(){
+    state.todos = getFromStorage(STORAGE_KEY) || [];
+    render();
+  });
