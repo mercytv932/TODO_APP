@@ -14,7 +14,7 @@ A professional todo application built with vanilla JavaScript.
 
 - HTML
 - CSS
-- Vanilla JavaScript
+- JavaScript
 
 ## How to Run
 
